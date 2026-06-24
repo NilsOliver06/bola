@@ -5,10 +5,15 @@ WORKDIR /src
 COPY . .
 RUN dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -o /out
 
-# Contenedor final superligero
+# Contenedor final basado en Ubuntu/Debian ligero
 FROM mcr.microsoft.com/dotnet/runtime-deps:10.0
 WORKDIR /app
 COPY --from=build /out .
+
+# ✅ INSTALAR LIBRERÍAS DE SEGURIDAD REQUERIDAS POR NPGSQL
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Configurar el puerto dinámico de Railway de forma segura
 ENV ASPNETCORE_URLS=http://+:8080
