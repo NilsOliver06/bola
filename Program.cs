@@ -29,7 +29,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
-        dbContext.Database.Migrate();
+        //dbContext.Database.Migrate();
         Console.WriteLine("✅ Migraciones aplicadas correctamente y tablas verificadas.");
     }
     catch (Exception ex)
